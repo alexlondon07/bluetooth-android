@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="io.github.alexlondon07.bluetooth.MainActivity">
+
+    <Button
+        android:id="@+id/btn_on"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth ON"
+        android:onClick="BluetoothON"
+        android:enabled="false"
+        />
+
+    <Button
+        android:id="@+id/btn_off"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth OFF"
+        android:onClick="BluetoothOFF"
+        android:enabled="false"
+        />
+
+    <Button
+        android:id="@+id/btn_discover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth scanner "
+        android:onClick="BluetoothDiscover"
+        android:enabled="false"
+        />
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:choiceMode="singleChoice"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
