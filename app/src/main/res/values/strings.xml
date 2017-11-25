@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Bluetooth App</string>
+    <string name="conectandoBluetooth">Conectado a dispositivo</string>
+    <string name="conexionFallida">Conexión fallida</string>
+    <string name="bluetoothEncedido">Bluetooth Encendido</string>
+    <string name="bluetoothEncendido">Bluetooth ya se encuentra encendido</string>
+    <string name="dispositivoNoSoportado">Dispotivo no soportado con Bluetooth</string>
 </resources>

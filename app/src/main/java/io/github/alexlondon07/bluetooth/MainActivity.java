@@ -3,8 +3,12 @@ package io.github.alexlondon07.bluetooth;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
@@ -31,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Manejadores y Conexiones
     private Handler handler;
-    private ConnectedThread connectedThread;
+    //private ConnectedThread connectedThread;
     private BluetoothSocket bluetoothSocket;
 
 
@@ -93,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
                    if(message.what == CONNECTION_STATUS){
                        if(message.arg1 == 1){
-                           Log.i(TAG, "Conectado a dispositivo " + message.obj);
+                           Log.i(TAG, getString(R.string.conectandoBluetooth) + message.obj);
                        }else{
-                           Log.i(TAG, "Conexión fallida " + message.obj);
+                           Log.i(TAG, getString(R.string.conexionFallida) + message.obj);
                        }
                    }
 
@@ -108,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void validateBlueTDevice() {
         if(bluetoothAdapter == null){
-            Toast.makeText(this, "Dispotivo no soportado con Bluetooth", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.dispositivoNoSoportado, Toast.LENGTH_LONG).show();
         }else {
             buttonOn.setEnabled(true);
             buttonOf.setEnabled(true);
@@ -122,20 +126,44 @@ public class MainActivity extends AppCompatActivity {
         if(!bluetoothAdapter.isEnabled()){
             Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
             startActivityForResult(enableBTIntent, REQUEST_ENABLE_BT);
-            Toast.makeText(this, "Bluetooth Encendido", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.bluetoothEncedido, Toast.LENGTH_LONG).show();
         }else {
-            Toast.makeText(this, "Bluetooth ya se encuentra encendido", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.bluetoothEncendido, Toast.LENGTH_LONG).show();
         }
 
     }
 
     public void BluetoothOFF(View view) {
 
-
+        bluetoothAdapter.disable();
+        Toast.makeText(this, R.string.bluetoothEncendido, Toast.LENGTH_SHORT).show();
 
     }
 
     public void BluetoothDiscover(View view) {
 
+        if(bluetoothAdapter.isEnabled()){
+            arrayAdapter.clear();
+            bluetoothAdapter.startDiscovery();
+            Toast.makeText(this, "Descrubir iniciando...", Toast.LENGTH_SHORT).show();
+            registerReceiver(btnReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+        }else {
+            Toast.makeText(this, R.string.bluetoothEncendido, Toast.LENGTH_LONG).show();
+        }
     }
+
+
+    final BroadcastReceiver btnReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            if(BluetoothDevice.ACTION_FOUND.equals(action)){
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                //Agregar devices al adaptador
+                arrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                arrayAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 }
